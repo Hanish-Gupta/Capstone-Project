@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" type="text/css" href="css/weddings.css" />
+    <link rel="stylesheet" type="text/css" href="css/1weddings.css" />
+
+    <!-- Set Content Security Policy to allow Firebase and external scripts -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://www.gstatic.com https://www.googleapis.com 'unsafe-inline'; object-src 'none';">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://example.com/your-image.jpg'); /* Replace with a valid image URL */
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: sky-blue;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        #success-message {
+            display: none;
+            color: green;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #review-textbox {
+            width: 100%;
+            height: 200px; /* Increased height for better visibility */
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+background-color:rgba(255, 202, 146, 0.825);
+            resize: none; /* Prevent resizing */
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+  <img src="images/31.jpg" style="float:left" />
+  <img src="images/wlogo31 copy.jpg" style="float:left" />
+</div>
+<br><br><br><br>
+<div id="banner">
+  <ul id="navmenu">
+    <div id="content_area">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="photography.html">Photography</a></li>
+      <li><a href="dressing.html">Dressing</a></li>
+      <li><a href="decoration.html">Decoration</a></li>
+      <li><a href="catering.html">Catering</a></li>
+      <li><a href="contact us.html">Contact Us</a></li>
+    </div>
+  </ul>
+
+<div class="form-container">
+    <h2>Contact Us</h2>
+    <form id="contact-form">
+        <label for="name">Name*</label>
+        <input type="text" id="name" required autocomplete="name">
+
+        <label for="occasion">Occasion*</label>
+        <input type="text" id="occasion" required autocomplete="organization-title">
+
+        <label for="email">E-mail*</label>
+        <input type="email" id="email" required autocomplete="email">
+
+        <label for="mobile">Mobile*</label>
+        <input type="tel" id="mobile" required autocomplete="tel">
+
+        <label for="city">City*</label>
+        <input type="text" id="city" required autocomplete="address-level2">
+
+        <label for="venue">Venue*</label>
+        <input type="text" id="venue" required autocomplete="address-level1">
+
+        <label for="eventDate">Event Date*</label>
+        <input type="date" id="eventDate" required>
+
+        <label for="budget">Decor Budget*</label>
+        <input type="text" id="budget" required>
+
+        <label for="message">Message*</label>
+        <textarea id="message" rows="5" required></textarea>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <!-- Success message -->
+    <div id="success-message">Information saved successfully!</div>
+
+    <!-- Review Textbox -->
+    <h3>Fetched Information:</h3>
+    <textarea id="review-textbox" readonly placeholder="Latest review will appear here"></textarea>
+</div>
+
+<!-- Firebase SDKs (using version 8.x) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<!-- Firebase Initialization -->
+<script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCSa99ILWDFfvEehG5XVo2gG8tHFO9Jo4M",
+        authDomain: "wedding-93ee6.firebaseapp.com",
+        projectId: "wedding-93ee6",
+        storageBucket: "wedding-93ee6.appspot.com",
+        messagingSenderId: "420005780446",
+        appId: "1:420005780446:web:c16e52dcd4e18025129b4f",
+        measurementId: "G-5WGTV4DRKZ"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Initialize Firestore
+    const db = firebase.firestore();
+</script>
+
+<!-- Form submission and fetching review script -->
+<script>
+    // Add an event listener for form submission
+    document.getElementById('contact-form').addEventListener('submit', function (event) {
+        event.preventDefault();  // Prevent default form submission
+
+        // Collect form data
+        const name = document.getElementById('name').value;
+        const occasion = document.getElementById('occasion').value;
+        const email = document.getElementById('email').value;
+        const mobile = document.getElementById('mobile').value;
+        const city = document.getElementById('city').value;
+        const venue = document.getElementById('venue').value;
+        const eventDate = document.getElementById('eventDate').value;
+        const budget = document.getElementById('budget').value;
+        const message = document.getElementById('message').value;
+
+        // Save to Firestore
+        db.collection('contacts').add({
+            name: name,
+            occasion: occasion,
+            email: email,
+            mobile: mobile,
+            city: city,
+            venue: venue,
+            eventDate: eventDate,
+            budget: budget,
+            message: message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()  // Add a timestamp
+        }).then(function () {
+            // Show success message
+            document.getElementById('success-message').style.display = 'block';
+            // Clear form
+            document.getElementById('contact-form').reset();
+
+            // Fetch the latest review from Firestore
+            fetchLatestReview();
+        }).catch(function (error) {
+            console.error('Error writing document: ', error);
+        });
+    });
+
+    // Function to fetch the latest review from Firestore
+    function fetchLatestReview() {
+        db.collection('contacts')
+          .orderBy('timestamp', 'desc') // Order by timestamp in descending order
+          .limit(1) // Limit to the latest review
+          .get()
+          .then(function (querySnapshot) {
+              // Clear the textbox before displaying new data
+              document.getElementById('review-textbox').value = '';
+              
+              querySnapshot.forEach(function (doc) {
+                  const reviewData = doc.data();
+                  const reviewText = `
+                    Name: ${reviewData.name}
+                    Occasion: ${reviewData.occasion}
+                    Email: ${reviewData.email}
+                    Mobile: ${reviewData.mobile}
+                    City: ${reviewData.city}
+                    Venue: ${reviewData.venue}
+                    Event Date: ${reviewData.eventDate}
+                    Decor Budget: ${reviewData.budget}
+                    Message: ${reviewData.message}
+                  `;
+                  document.getElementById('review-textbox').value = reviewText;
+              });
+          }).catch(function (error) {
+              console.error('Error fetching latest review: ', error);
+          });
+    }
+
+    // Fetch the latest review on page load
+    window.onload = function() {
+        fetchLatestReview();
+    }
+</script>
+</body>
+</html>
